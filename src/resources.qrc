@@ -26,8 +26,8 @@
         <file alias="pending_balance">icons/pending_balance.png</file>
         <file alias="total_balance">icons/total_balance.png</file>
         <file alias="dark/balance">icons/balance.png</file>
-        <file alias="dark/logo">icons/logo.png</file>
-        <file alias="light/logo">icons/logo_bl.png</file>
+        <file alias="dark/logo">icons/logo_cc.png</file>
+        <file alias="light/logo">icons/logo_bl_cc.png</file>
         <file alias="inp_clock1">icons/inp_clock1.png</file>
         <file alias="inp_clock2">icons/inp_clock2.png</file>
         <file alias="inp_clock3">icons/inp_clock3.png</file>
@@ -98,13 +98,13 @@
     </qresource>
     <qresource prefix="/images">
         <file alias="splash">images/splash.png</file>
-        <file alias="bytecoin_lin">images/bytecoin.png</file>
+        <file alias="dotoricoin_lin">images/dotoricoin.png</file>
         <file alias="add_address_helper">images/add_address_helper.png</file>
-        <file alias="bytecoin_mac">images/bytecoin.icns</file>
-        <file alias="bytecoin_win">images/bytecoin.ico</file>
+        <file alias="dotoricoin_mac">images/dotoricoin.icns</file>
+        <file alias="dotoricoin_win">images/dotoricoin.ico</file>
     </qresource>
     <qresource prefix="/style">
-        <file alias="qss">bytecoinwallet.qss</file>
+        <file alias="qss">dotoricoinwallet.qss</file>
     </qresource>
     <qresource prefix="/font">
         <file alias="Bold">font/OpenSans-Bold.ttf</file>

@@ -33,7 +33,7 @@ namespace WalletGui {
 
 namespace {
 
-const QDateTime EPOCH_DATE_TIME = QDateTime::fromMSecsSinceEpoch(0);
+const QDateTime EPOCH_DATE_TIME = QDateTime::fromMSecsSinceEpoch(0).toUTC();
 const int TEMP_MESSAGE_DURATION = 3000;
 const int MSECS_IN_MINUTE = 60 * 1000;
 const int MSECS_IN_HOUR = 60 * MSECS_IN_MINUTE;
@@ -177,7 +177,8 @@ void WalletStatusBar::synchronizationProgressUpdated(quint32 _current, quint32 _
   QString blockchainAge = lastBlockTimestamp > 0 ? QStringLiteral("%1 ago").arg(formattedTimeDiff) : QStringLiteral("%1").arg(formattedTimeDiff);
 
   m_walletIsSynchronized = false;
-  m_syncStatusLabel->setText(tr("Synchronization: %1/%2 (%3)").arg(_current).arg(_total).arg(blockchainAge));
+  //m_syncStatusLabel->setText(tr("Synchronization: %1/%2 (%3)").arg(_current).arg(_total).arg(blockchainAge));
+  m_syncStatusLabel->setText(tr("Synchronization: %1/%2").arg(_current).arg(_total));
   updateSyncState(false);
 }
 

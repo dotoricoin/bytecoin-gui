@@ -54,7 +54,7 @@
    <item alignment="Qt::AlignHCenter">
     <widget class="WalletGui::WalletHeaderLabel" name="m_welcomeLabel">
      <property name="text">
-      <string>Welcome to Bytecoin Wallet!</string>
+      <string>Welcome to DotoriCoin Wallet!</string>
      </property>
     </widget>
    </item>
@@ -293,7 +293,7 @@
         </size>
        </property>
        <property name="text">
-        <string>Open wallet</string>
+        <string>Load wallet</string>
        </property>
       </widget>
      </item>

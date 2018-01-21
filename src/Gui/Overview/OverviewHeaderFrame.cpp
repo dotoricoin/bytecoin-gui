@@ -25,8 +25,8 @@
 #include "OverviewHeaderFrame.h"
 #include "Settings/Settings.h"
 #include "OverviewHeaderGlassFrame.h"
-#include "Common/LinkLikeColumnDelegate.h"
-#include "Common/PoolTransactionDetailsDialog.h"
+#include "Gui/Common/LinkLikeColumnDelegate.h"
+#include "Gui/Common/PoolTransactionDetailsDialog.h"
 #include "ICryptoNoteAdapter.h"
 #include "Models/MinerModel.h"
 #include "Models/NodeStateModel.h"
@@ -360,20 +360,20 @@ void OverviewHeaderFrame::poolTransactionClicked(const QModelIndex& _index) {
 }
 
 void OverviewHeaderFrame::startMiningClicked(bool _on) {
-  if (_on) {
-    m_ui->m_startMiningButton->setText(tr("Stop mining"));
-    m_ui->m_miningStateLabel->setText(tr("mining on"));
-    m_ui->m_miningStateLabel->setProperty("miningRunning", true);
-    m_miningManager->startMining();
-  } else {
-    m_ui->m_startMiningButton->setText(tr("Start mining"));
-    m_ui->m_miningStateLabel->setText(tr("mining off"));
-    m_ui->m_miningStateLabel->setProperty("miningRunning", false);
-    m_miningManager->stopMining();
-  }
+   if (_on) {
+     m_ui->m_startMiningButton->setText(tr("Stop mining"));
+     m_ui->m_miningStateLabel->setText(tr("mining on"));
+     m_ui->m_miningStateLabel->setProperty("miningRunning", true);
+     m_miningManager->startMining();
+   } else {
+     m_ui->m_startMiningButton->setText(tr("Start mining"));
+     m_ui->m_miningStateLabel->setText(tr("mining off"));
+     m_ui->m_miningStateLabel->setProperty("miningRunning", false);
+     m_miningManager->stopMining();
+   }
 
-  m_ui->m_miningStateLabel->style()->unpolish(m_ui->m_miningStateLabel);
-  m_ui->m_miningStateLabel->style()->polish(m_ui->m_miningStateLabel);
+   m_ui->m_miningStateLabel->style()->unpolish(m_ui->m_miningStateLabel);
+   m_ui->m_miningStateLabel->style()->polish(m_ui->m_miningStateLabel);
 }
 
 }

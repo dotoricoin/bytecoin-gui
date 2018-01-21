@@ -25,8 +25,8 @@
 #include "MiningFrame.h"
 #include "Settings/Settings.h"
 #include "ApplicationEventHandler.h"
-#include "Common/QuestionDialog.h"
-#include "Common/RightAlignmentColumnDelegate.h"
+#include "Gui/Common/QuestionDialog.h"
+#include "Gui/Common/RightAlignmentColumnDelegate.h"
 #include "IMiningManager.h"
 #include "IPoolMiner.h"
 #include "MinerDelegate.h"
@@ -415,19 +415,19 @@ void MiningFrame::schedulePolicyChanged(QAbstractButton* _button, bool _checked)
 }
 
 void MiningFrame::startMiningClicked(bool _on) {
-  if (_on) {
-    m_ui->m_startMiningButton->setText(tr("Stop"));
-    m_ui->m_startMiningButton->setFixedWidth(50);
-    m_ui->m_hashrateLabel->setText("0 H/s");
-    m_ui->m_donationHashRateLabel->setText("0 H/s");
-    startMining();
-  } else {
-    m_ui->m_startMiningButton->setText(tr("Start mining"));
-    m_ui->m_startMiningButton->setFixedWidth(190);
-    stopMining();
-  }
+   if (_on) {
+     m_ui->m_startMiningButton->setText(tr("Stop"));
+     m_ui->m_startMiningButton->setFixedWidth(50);
+     m_ui->m_hashrateLabel->setText("0 H/s");
+     m_ui->m_donationHashRateLabel->setText("0 H/s");
+     startMining();
+   } else {
+     m_ui->m_startMiningButton->setText(tr("Start mining"));
+     m_ui->m_startMiningButton->setFixedWidth(190);
+     stopMining();
+   }
 
-  m_ui->m_hashRateFrame->setVisible(_on);
+   m_ui->m_hashRateFrame->setVisible(_on);
 }
 
 }

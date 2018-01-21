@@ -395,6 +395,9 @@
         </item>
         <item alignment="Qt::AlignLeft|Qt::AlignVCenter">
          <widget class="QPushButton" name="m_startMiningButton">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
           </property>
@@ -656,14 +659,14 @@
    <header>Gui/Common/WalletTextLabel.h</header>
   </customwidget>
   <customwidget>
-   <class>WalletGui::WalletHeaderLabel</class>
-   <extends>QLabel</extends>
-   <header>Gui/Common/WalletTextLabel.h</header>
-  </customwidget>
-  <customwidget>
    <class>WalletGui::CopyMagicLabel</class>
    <extends>QLabel</extends>
    <header>Gui/Common/CopyMagicLabel.h</header>
+  </customwidget>
+  <customwidget>
+   <class>WalletGui::WalletHeaderLabel</class>
+   <extends>QLabel</extends>
+   <header>Gui/Common/WalletTextLabel.h</header>
   </customwidget>
   <customwidget>
    <class>WalletGui::WalletNormalGrayTextLabel</class>
