@@ -8,7 +8,7 @@ WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 OUTPUT_VARIABLE GIT_REVISION)
 
 set(CRYPTONOTE_LIB cryptonote)
-set(STATIC True CACHE BOOL "Link libraries statically")
+set(STATIC ${MSVC} CACHE BOOL "Link libraries statically")
 
 include_directories(${CMAKE_BINARY_DIR}
   src
@@ -19,21 +19,25 @@ include_directories(${CMAKE_BINARY_DIR}
   cryptonote/src
 )
 
+find_package(Qt5Core REQUIRED)
 find_package(Qt5Gui REQUIRED)
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Network REQUIRED)
-find_package(Qt5DBus REQUIRED)
-
-include_directories(${Qt5DBus_INCLUDE_DIRS} cryptonote/external/rocksdb/include/ include src external "${CMAKE_CURRENT_BINARY_DIR}/version")
+if (${MSVC})
+   include_directories(cryptonote/external/rocksdb/include/ include src external} "${CMAKE_CURRENT_BINARY_DIR}/version")
+else()
+   find_package(Qt5DBus REQUIRED)
+   include_directories(cryptonote/external/rocksdb/include/ include src external Qt5DBus_INCLUDE_DIRS} "${CMAKE_CURRENT_BINARY_DIR}/version")
+endif()
 
 if(STATIC)
   set(Boost_USE_STATIC_LIBS ON)
   set(Boost_USE_STATIC_RUNTIME ON)
 endif()
 
-find_package(Boost 1.58 REQUIRED COMPONENTS date_time filesystem program_options regex serialization system thread chrono)
+find_package(Boost 1.55 REQUIRED COMPONENTS date_time filesystem program_options regex system thread chrono)
 if ((${Boost_MAJOR_VERSION} EQUAL 1) AND (${Boost_MINOR_VERSION} EQUAL 54))
-  message(SEND_ERROR "Boost version 1.58 is unsupported, more details are available here http://goo.gl/RrCFmA")
+  message(SEND_ERROR "Boost version 1.54 is unsupported, more details are available here http://goo.gl/RrCFmA")
 endif ()
 
 include_directories(${Boost_INCLUDE_DIRS})
@@ -169,10 +173,10 @@ if (WIN32)
       string(REPLACE "/MD" "/MT" ${VAR} "${${VAR}}")
     endforeach()
   endif()
-
+  
   add_definitions(/D_CRT_SECURE_NO_WARNINGS /D_WIN32_WINNT=0x0600 /DSTATICLIB)
   include_directories(cryptonote/src/Platform/msc)
-  link_directories(cryptonote/external/rocksdb)
+  set(CMAKE_STATIC_LINKER_FLAGS "${CMAKE_STATIC_LINKER_FLAGS} ${CMAKE_SOURCE_DIR}/lib/winx64/rocksdblib.lib")
 
   set(PLATFORM_DIR Windows)
   set(BUILD_PLATFORM WIN32)
@@ -235,19 +239,28 @@ set(CRYPTONOTE_SOURCES ${CRYPTONOTE_SOURCES} ${PLATFORM_SOURCES} ${CRYPTONOTE_PL
 
 add_library(${CRYPTONOTE_LIB} STATIC ${CRYPTONOTE_SOURCES})
 set_target_properties(${CRYPTONOTE_LIB} PROPERTIES COMPILE_DEFINITIONS _GNU_SOURCE)
-target_link_libraries(${CRYPTONOTE_LIB} ${Boost_LIBRARIES} ${Qt5DBus_LIBRARIES} rocksdblib)
+if (WIN32)
+  target_link_libraries(${CRYPTONOTE_LIB} ${Boost_LIBRARIES} ${CMAKE_SOURCE_DIR}/lib/winx64/rocksdblib.lib)
+else ()  
+  target_link_libraries(${CRYPTONOTE_LIB} ${Boost_LIBRARIES} rocksdblib)
+endif ()  
 
 add_executable(${PROJECT_NAME} ${BUILD_PLATFORM} ${BUILD_RESOURCES} ${SOURCES} ${HEADERS} ${UIS} ${RCC})
-
 set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_DEFINITIONS _GNU_SOURCE)
-target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES} ${QTMAIN} ${CRYPTONOTE_LIB} ${Qt5DBus_LIBRARIES} rocksdblib)
+target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES} ${CRYPTONOTE_LIB} ${QTMAIN})
 
 if (APPLE)
+  target_link_libraries(${PROJECT_NAME} ${Qt5DBus_LIBRARIES} rocksdblib)
   qt5_use_modules(${PROJECT_NAME} PrintSupport)
 elseif (UNIX)
+  target_link_libraries(${PROJECT_NAME} ${Qt5DBus_LIBRARIES} rocksdblib)
   target_link_libraries(${PROJECT_NAME} -lpthread)
 elseif (WIN32)
-  target_link_libraries(${PROJECT_NAME} Imm32 Iphlpapi Winmm UxTheme d3d9 dxguid Rpcrt4 Wtsapi32 Dwmapi "${_qt5Widgets_install_prefix}/lib/qtharfbuzz.lib" "${_qt5Widgets_install_prefix}/lib/qtlibpng.lib" "${_qt5Widgets_install_prefix}/lib/qtpcre.lib" "${_qt5Widgets_install_prefix}/lib/Qt5EventDispatcherSupport.lib" "${_qt5Widgets_install_prefix}/lib/Qt5OpenGL.lib" "${_qt5Widgets_install_prefix}/lib/Qt5AccessibilitySupport.lib" "${_qt5Widgets_install_prefix}/lib/Qt5ThemeSupport.lib" "${_qt5Widgets_install_prefix}/lib/libGLESv2.lib" "${_qt5Widgets_install_prefix}/lib/libEGL.lib" "${_qt5Widgets_install_prefix}/lib/qtfreetype.lib" "${_qt5Widgets_install_prefix}/lib/Qt5FontDatabaseSupport.lib" "${_qt5Widgets_install_prefix}/lib/preprocessor.lib" "${_qt5Widgets_install_prefix}/lib/translator.lib" "${_qt5Widgets_install_prefix}/plugins/platforms/qwindows.lib")
+  set(QTLIB "${_qt5Widgets_install_prefix}/lib")
+  target_link_libraries(${PROJECT_NAME} Imm32 Iphlpapi Winmm Wtsapi32 Rpcrt4 Ws2_32 opengl32 
+      "${QTLIB}/qtpcre.lib" "${QTLIB}/qtharfbuzzng.lib" "${QTLIB}/qtfreetype.lib" 
+      "${QTLIB}/Qt5PlatformSupport.lib" "${_qt5Widgets_install_prefix}/plugins/platforms/qwindows.lib"      
+      )
 endif (APPLE)
 
-qt5_use_modules(${PROJECT_NAME} Widgets Gui Network)
+qt5_use_modules(${PROJECT_NAME} Widgets Gui Network Core)
